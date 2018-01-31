@@ -3,3 +3,6 @@ create table mensajitos(id integer primary key auto_increment,
 
 
 select * from mensajitos;
+
+
+

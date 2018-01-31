@@ -1,5 +1,6 @@
 package unitec.org.elementos;
 
+import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -16,8 +17,27 @@ public class ElementosApplication implements CommandLineRunner{
 
     @Override
     public void run(String... strings) throws Exception {
-        Mensajitos m=new Mensajitos("primero", "mi primer mensajito con hibernate");
-        repoMensa.save(m);
+        //guardar
+       //Mensajitos m=new Mensajitos("kanchi", "aaalol");
+        //repoMensa.save(m);
         
+        
+        //buscar todos
+       //ArrayList<Mensajitos> mensajitos= 
+         //      (ArrayList<Mensajitos>) repoMensa.findAll();
+       //for (Mensajitos mensa: mensajitos){
+         //  System.out.println(mensa.getTitulo());
+        //}
+        
+        //probaremos buscar por id
+        
+        //Mensajitos ml = repoMensa.findOne(3);
+        //System.out.println(ml.getTitulo());
+                
+        //update actualizacion
+        
+        //repoMensa.save(new Mensajitos(1,"si se pudo","lol "));
+        //borrar
+        //repoMensa.delete(1);
     }
 }

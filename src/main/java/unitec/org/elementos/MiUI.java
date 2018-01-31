@@ -8,10 +8,13 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 @SpringUI
 @Theme("valo")
 public class MiUI extends UI{
+    
 
     @Override
     protected void init(VaadinRequest request) {
@@ -34,4 +37,20 @@ public class MiUI extends UI{
     setContent(layout);
     }
     
+    
+    
+    
+    // Have some data
+ ArrayList<Mensajitos> people = Array.asList(
+    new Mensajitos("Nicolaus Copernicus", "1543"),
+    new Mensajitos("Galileo Galilei", "1564"),
+    new Mensajitos("Johannes Kepler", "1571"));
+
+// Create a grid bound to the list
+Grid<Mensajitos> grid = new Grid<>();
+grid.setItems(people);
+grid.addColumn(Mensajitos::getTitulo).setCaption("Titulo");
+grid.addColumn(Mensajitos::getCuerpo).setCaption("Cuerpo");
+
+layout.addComponent(grid);
 }
