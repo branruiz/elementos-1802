@@ -4,16 +4,18 @@ import com.vaadin.annotations.Theme;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Grid;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @SpringUI
 @Theme("valo")
 public class MiUI extends UI{
+    @Autowired RepositorioMensajitos repoMensa;
     
 
     @Override
@@ -34,23 +36,25 @@ public class MiUI extends UI{
     layout.addComponent(e1);
     layout.addComponent(b1);
     //Esto que sigue solo se hace una vez agregamos el layput a la pagina index
-    setContent(layout);
-    }
+    //setContent(layout);
+    
     
     
     
     
     // Have some data
- ArrayList<Mensajitos> people = Array.asList(
-    new Mensajitos("Nicolaus Copernicus", "1543"),
-    new Mensajitos("Galileo Galilei", "1564"),
-    new Mensajitos("Johannes Kepler", "1571"));
+List<Mensajitos> mensajitos = (List<Mensajitos>) repoMensa.findAll();
+  
 
 // Create a grid bound to the list
 Grid<Mensajitos> grid = new Grid<>();
-grid.setItems(people);
-grid.addColumn(Mensajitos::getTitulo).setCaption("Titulo");
-grid.addColumn(Mensajitos::getCuerpo).setCaption("Cuerpo");
+grid.setItems(mensajitos);
+grid.addColumn(Mensajitos::getId).setCaption("ID");
+grid.addColumn(Mensajitos::getTitulo).setCaption("Titulo del mesnsaje");
+grid.addColumn(Mensajitos::getCuerpo).setCaption("Cuerpo del mensaje");
 
 layout.addComponent(grid);
+
+setContent(layout);
+}
 }
