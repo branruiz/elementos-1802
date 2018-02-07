@@ -1,60 +1,103 @@
 package unitec.org.elementos;
 
+import com.oracle.webservices.internal.api.message.MessageContext;
 import com.vaadin.annotations.Theme;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.Grid;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.data.util.*;
+import com.vaadin.ui.Grid;
+import com.vaadin.ui.Grid.SelectionMode;
+import com.vaadin.ui.TextField;
+import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.ValoTheme;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
+/**
+ *
+ * @author campitos
+ */
 @SpringUI
 @Theme("valo")
-public class MiUI extends UI{
-    @Autowired RepositorioMensajitos repoMensa;
+public class MiUI extends UI {
     
+    public TextField t1;
+    public TextField t2;
+    public Integer miId;
+
+    @Autowired
+    RepositorioMensajitos repoMensa;
 
     @Override
     protected void init(VaadinRequest request) {
-    //Agregaremos un layaut vertical y dentro de el las componentesque quedaran  en orden descendente        
-    VerticalLayout layout=new VerticalLayout();
-    Label e1=new Label("Bienvenidos");
-    e1.addStyleName(ValoTheme.LABEL_H1);
-    
-    Button b1=new Button("Guardar");
-    b1.addStyleNames(ValoTheme.BUTTON_DANGER);
-    //Vamos  programar el eveneto del boton b1 usando programacion funcional
-    b1.addClickListener(algo->{
-       //Aqui ponemos el evento
-       e1.setValue("Mi primer programacion funcional");
-    });
-    //Agregamos las componentes al layout
-    layout.addComponent(e1);
-    layout.addComponent(b1);
-    //Esto que sigue solo se hace una vez agregamos el layput a la pagina index
-    //setContent(layout);
-    
-    
-    
-    
-    
-    // Have some data
-List<Mensajitos> mensajitos = (List<Mensajitos>) repoMensa.findAll();
-  
+        VerticalLayout layout = new VerticalLayout();
+        Label e1 = new Label("Bienvenido");
+        layout.addComponent(e1);
+        Button b1 = new Button("Guardar");
+        layout.addComponent(b1);
+        e1.addStyleName(ValoTheme.LABEL_H1);
+        t1=new TextField();
+        t2=new TextField();
+        b1.addStyleName(ValoTheme.BUTTON_PRIMARY);
+        b1.addClickListener(malo -> {
+            Notification.
+                    show("Error", "Este es un error que acabas de cometer", Notification.Type.ERROR_MESSAGE);
+        }
+        );
 
-// Create a grid bound to the list
-Grid<Mensajitos> grid = new Grid<>();
-grid.setItems(mensajitos);
-grid.addColumn(Mensajitos::getId).setCaption("ID");
-grid.addColumn(Mensajitos::getTitulo).setCaption("Titulo del mesnsaje");
-grid.addColumn(Mensajitos::getCuerpo).setCaption("Cuerpo del mensaje");
+        List<Mensajitos> mensajitos = (List<Mensajitos>) repoMensa.findAll();
 
-layout.addComponent(grid);
+        Grid<Mensajitos> grid = new Grid<>();
+        grid.setItems(mensajitos);
+        grid.addColumn(Mensajitos::getId).setCaption("ID");
+        grid.addColumn(Mensajitos::getTitulo).setCaption("Titulo del mensaje");
+        grid.addColumn(Mensajitos::getCuerpo).setCaption("Puerco del mensaje");
 
-setContent(layout);
+        grid.setSelectionMode(SelectionMode.SINGLE);
+
+        grid.addItemClickListener(evento -> {
+           Notification.show("Valor: " + evento.getItem().getTitulo());
+            MiVentana sub = new MiVentana();
+
+            UI.getCurrent().addWindow(sub);
+            
+            t1.setValue(evento.getItem().getTitulo());
+            t2.setValue(evento.getItem().getCuerpo());
+        });
+
+        layout.addComponent(grid);
+
+        setContent(layout);
+    }
+class MiVentana extends Window {
+
+    public MiVentana() {
+        super("Actualizar o borrar");
+        center();
+        VerticalLayout vl2 = new VerticalLayout();
+        
+        //TextField t1 = new TextField("TITULO");
+        
+        //TextField t2 = new TextField("CUERPO");
+
+        Button boton = new Button("Actualizar");
+        boton.addClickListener(evento -> {
+            close();
+        });
+        vl2.addComponent(t1);
+        vl2.addComponent(t2);
+        vl2.addComponent(boton);
+
+        setContent(vl2);
+    }
 }
 }
+
